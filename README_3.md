@@ -191,8 +191,7 @@ Password: admin  (or check admins table in DB)
 ---
 
 ## 📸 Screenshots
-
-> *(Add screenshots of homepage, laptop detail, booking form, and admin dashboard here)*
+<img width="1919" height="881" alt="Screenshot 2026-05-18 105251" src="https://github.com/user-attachments/assets/4ccf8883-ee4a-46ce-853d-6d3378468a65" />
 
 ---
 
