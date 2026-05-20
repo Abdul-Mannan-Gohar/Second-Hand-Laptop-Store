@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LaptopsDB — ER Diagram</title>
+<style>
+  body { margin: 0; background: #f0f4f8; font-family: 'Segoe UI', Arial, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 24px; }
+  h1 { color: #1e3a5f; margin-bottom: 24px; font-size: 22px; letter-spacing: 1px; }
+  .canvas { position: relative; width: 900px; height: 640px; background: #f0f4f8; }
+  .table { position: absolute; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 18px #0002; min-width: 180px; }
+  .table-header { background: #1e3a5f; color: white; text-align: center; font-weight: bold; font-size: 14px; padding: 10px 0; letter-spacing: 0.5px; }
+  .table-header.gray { background: #6b7280; }
+  .table-body { background: #eef2f7; }
+  .table-body.gray { background: #f3f4f6; }
+  .row { padding: 6px 14px; font-size: 12px; color: #444; border-bottom: 1px solid #d8e0ee; white-space: nowrap; }
+  .row:last-child { border-bottom: none; }
+  .pk { color: #b45309; font-weight: bold; }
+  .fk { color: #e05c00; font-weight: bold; }
+  svg.lines { position: absolute; top: 0; left: 0; width: 900px; height: 640px; pointer-events: none; overflow: visible; }
+  .legend { margin-top: 18px; background: white; border-radius: 8px; padding: 12px 24px; display: flex; gap: 32px; align-items: center; font-size: 13px; color: #444; box-shadow: 0 2px 8px #0001; }
+  .leg-item { display: flex; align-items: center; gap: 8px; }
+  .leg-line-fk { width: 40px; height: 3px; background: repeating-linear-gradient(90deg,#e05c00 0,#e05c00 6px,transparent 6px,transparent 10px); }
+  .leg-line-soft { width: 40px; height: 3px; background: repeating-linear-gradient(90deg,#9ca3af 0,#9ca3af 5px,transparent 5px,transparent 9px); }
+</style>
+</head>
+<body>
+<h1>🗄️ LaptopsDB — Entity Relationship Diagram</h1>
+<div class="canvas" id="canvas">
+
+  <!-- ADMINS -->
+  <div class="table" style="left:20px;top:20px;width:210px">
+    <div class="table-header">admins</div>
+    <div class="table-body">
+      <div class="row pk">🔑 id (PK, INT, AUTO)</div>
+      <div class="row">username (VARCHAR 50)</div>
+      <div class="row">password (VARCHAR 255)</div>
+    </div>
+  </div>
+
+  <!-- USERS -->
+  <div class="table" id="tbl-users" style="left:20px;top:210px;width:210px">
+    <div class="table-header">users</div>
+    <div class="table-body">
+      <div class="row pk">🔑 id (PK, INT, AUTO)</div>
+      <div class="row">name (VARCHAR 100)</div>
+      <div class="row">whatsapp (VARCHAR 15)</div>
+      <div class="row">email (VARCHAR 100)</div>
+      <div class="row">address (TEXT)</div>
+    </div>
+  </div>
+
+  <!-- LAPTOPS -->
+  <div class="table" id="tbl-laptops" style="left:345px;top:20px;width:225px">
+    <div class="table-header">laptops</div>
+    <div class="table-body">
+      <div class="row pk">🔑 id (PK, INT, AUTO)</div>
+      <div class="row">photo (VARCHAR 255)</div>
+      <div class="row">name (VARCHAR 100)</div>
+      <div class="row">model (VARCHAR 100)</div>
+      <div class="row">price (DECIMAL 10,2)</div>
+      <div class="row">condition_status (VARCHAR 20)</div>
+      <div class="row">processor (VARCHAR 50)</div>
+      <div class="row">ram (VARCHAR 20)</div>
+      <div class="row">memory (VARCHAR 50)</div>
+      <div class="row">generation (VARCHAR 20)</div>
+      <div class="row">whatsapp (VARCHAR 15)</div>
+      <div class="row">status (ENUM)</div>
+      <div class="row">added_date (TIMESTAMP)</div>
+    </div>
+  </div>
+
+  <!-- ORDERS -->
+  <div class="table" id="tbl-orders" style="left:345px;top:460px;width:225px">
+    <div class="table-header">orders</div>
+    <div class="table-body">
+      <div class="row pk">🔑 order_id (PK, INT, AUTO)</div>
+      <div class="row fk">🔗 user_id (FK → users.id)</div>
+      <div class="row fk">🔗 laptop_id (FK → laptops.id)</div>
+      <div class="row">order_date (TIMESTAMP)</div>
+    </div>
+  </div>
+
+  <!-- LAPTOP_TRASH -->
+  <div class="table" style="left:660px;top:20px;width:225px">
+    <div class="table-header gray">laptop_trash</div>
+    <div class="table-body gray">
+      <div class="row pk">🔑 trash_id (PK, INT, AUTO)</div>
+      <div class="row">id (INT, ref)</div>
+      <div class="row">photo (VARCHAR 255)</div>
+      <div class="row">name (VARCHAR 100)</div>
+      <div class="row">model (VARCHAR 100)</div>
+      <div class="row">price (DECIMAL 10,2)</div>
+      <div class="row">condition_status (VARCHAR 20)</div>
+      <div class="row">processor (VARCHAR 50)</div>
+      <div class="row">ram (VARCHAR 20)</div>
+      <div class="row">memory (VARCHAR 50)</div>
+      <div class="row">generation (VARCHAR 20)</div>
+      <div class="row">whatsapp / status</div>
+      <div class="row">deleted_date (TIMESTAMP)</div>
+    </div>
+  </div>
+
+  <!-- SVG ARROWS -->
+  <svg class="lines">
+    <defs>
+      <marker id="arrow-fk" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L8,3 z" fill="#e05c00"/>
+      </marker>
+      <marker id="arrow-soft" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L8,3 z" fill="#9ca3af"/>
+      </marker>
+    </defs>
+
+    <!-- users → orders (user_id FK) -->
+    <path d="M 230 300 Q 290 300 290 508 L 345 508"
+      fill="none" stroke="#e05c00" stroke-width="2" stroke-dasharray="7,4"
+      marker-end="url(#arrow-fk)"/>
+    <text x="238" y="340" font-size="11" fill="#e05c00" font-weight="bold">1</text>
+    <text x="318" y="502" font-size="11" fill="#e05c00" font-weight="bold">N</text>
+
+    <!-- laptops → orders (laptop_id FK) -->
+    <path d="M 457 400 L 457 460"
+      fill="none" stroke="#e05c00" stroke-width="2" stroke-dasharray="7,4"
+      marker-end="url(#arrow-fk)"/>
+    <text x="462" y="436" font-size="11" fill="#e05c00" font-weight="bold">1</text>
+    <text x="462" y="458" font-size="11" fill="#e05c00" font-weight="bold">N</text>
+
+    <!-- laptops → laptop_trash (soft copy) -->
+    <path d="M 570 200 L 660 200"
+      fill="none" stroke="#9ca3af" stroke-width="2" stroke-dasharray="5,4"
+      marker-end="url(#arrow-soft)"/>
+    <text x="585" y="192" font-size="10" fill="#9ca3af">soft copy</text>
+  </svg>
+
+</div>
+
+<div class="legend">
+  <strong>Legend:</strong>
+  <div class="leg-item"><div class="leg-line-fk"></div> Foreign Key Relationship</div>
+  <div class="leg-item"><div class="leg-line-soft"></div> Soft Copy (Trash)</div>
+  <div class="leg-item">🔑 Primary Key</div>
+  <div class="leg-item">🔗 Foreign Key</div>
+</div>
+</body>
+</html>
