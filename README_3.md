@@ -114,7 +114,7 @@ Laptops/
 
 ### Step 1 — Clone or Download
 ```bash
-git clone https://github.com/YOUR_USERNAME/laptop-zone.git
+https://github.com/Abdul-Mannan-Gohar/Second-Hand-Laptop-Store.git
 ```
 Or download ZIP and extract.
 
